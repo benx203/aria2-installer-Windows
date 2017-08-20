@@ -1,7 +1,7 @@
 # aria2installer-Windows
 aria2安装包
 
-## Thanks
+# 感谢
 
 aria2
 
@@ -15,7 +15,12 @@ Inno Setup
 
 http://www.jrsoftware.org/isinfo.php
 
-## aria2 task manager
+Inno Setup 汉化增强版
+
+http://www.hanzify.org/software/11564.html
+
+# 其他
+## aria2任务管理
 
 yaaw
 
@@ -26,3 +31,17 @@ https://binux.github.io/yaaw/
 YAAW-for-Chrome
 
 https://github.com/acgotaku/YAAW-for-Chrome
+
+## aria2相关网盘助手
+
+百度云
+
+https://github.com/acgotaku/BaiduExporter 
+
+115
+
+https://github.com/acgotaku/115 
+
+迅雷(需要会员)
+
+https://github.com/binux/ThunderLixianExporter  
