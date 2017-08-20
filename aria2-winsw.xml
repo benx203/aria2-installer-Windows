@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service>  
+    <id>aria2</id>  
+    <name>aria2</name>  
+    <description>aria2</description>  
+    <executable>C:\Users\chenhua\Desktop\aria2installer\aria2c-x86.exe</executable>  
+	<logpath>C:\Users\chenhua\Desktop\aria2installer\test\</logpath>
+    <logmode>roll</logmode>  
+    <depend></depend>  
+    <startargument>--conf-path=C:\Users\chenhua\Desktop\aria2installer\test\aria2.conf</startargument>
+</service>
