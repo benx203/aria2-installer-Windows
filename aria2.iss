@@ -82,6 +82,7 @@ begin
   Result := True;
   if (not HasNet2()) and (not HasNet4()) then
   begin
+      MsgBox('需要.net2.0或4.0支持!', mbInformation, MB_OK);
       Result := False;
   end;
 end;
