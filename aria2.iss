@@ -1,4 +1,4 @@
-#include "compiler:WaterLib.iss"
+ï»¿#include "compiler:WaterLib.iss"
 [Setup]
 AppId={{93DD9CDA-9477-49D5-AC51-479CF0C598E7}
 AppName=Aria2
@@ -20,21 +20,20 @@ WizardImageFile=compiler:WizModernImage-Is.bmp
 #ifndef ISVersion
 Source: InnoCallback.dll; DestDir: {tmp}; Flags: dontcopy noencryption
 #endif
+Source: "aria2-winsw.xml"; DestDir: "{app}"; BeforeInstall: StopAria2
 Source: "winsw.net2.exe"; DestDir: "{app}"; DestName: "aria2-winsw.exe";Check: not HasNet4
 Source: "winsw.net4.exe"; DestDir: "{app}"; DestName: "aria2-winsw.exe";Check: HasNet4
-Source: "aria2-winsw.xml"; DestDir: "{app}"
 Source: "aria2c-x64.exe"; DestDir: "{app}"; DestName: "aria2c.exe"; Check: IsX64
 Source: "aria2c-x86.exe"; DestDir: "{app}"; DestName: "aria2c.exe"; Check: not IsX64
 Source: "aria2.conf"; DestDir: "{app}"
 Source: "aria2.log"; DestDir: "{app}"
-Source: "aria2.session"; DestDir: "{app}";AfterInstall: MyAfterInstall
-
+Source: "aria2.session"; DestDir: "{app}";AfterInstall: AfterCopyFiles
 
 [Icons]
-Name: "{group}\Æô¶¯aria2"; Filename: "{app}\aria2-winsw.exe";Parameters: "start"
-Name: "{group}\Í£Ö¹aria2"; Filename: "{app}\aria2-winsw.exe";Parameters: "stop"
-Name: "{group}\ÅäÖÃ"; Filename: "{app}\aria2.conf"
-Name: "{group}\Ğ¶ÔØaria2"; Filename: "{uninstallexe}"
+Name: "{group}\å¯åŠ¨aria2"; Filename: "{app}\aria2-winsw.exe";Parameters: "start"
+Name: "{group}\åœæ­¢aria2"; Filename: "{app}\aria2-winsw.exe";Parameters: "stop"
+Name: "{group}\é…ç½®"; Filename: "{app}\aria2.conf"
+Name: "{group}\å¸è½½aria2"; Filename: "{uninstallexe}"
 
 [INI]
 Filename: "{app}\aria2.conf"; Section: "config"; Key: "dir"; String: "{code:SelectDir}"
@@ -43,11 +42,24 @@ Filename: "{app}\aria2.conf"; Section: "config"; Key: "save-session"; String: "{
 
 [RUN]
 Filename: "{app}\aria2-winsw.exe"; Parameters: "install";Flags:runhidden
+Filename: "{app}\aria2-winsw.exe"; Description: "å¯åŠ¨aria2æœåŠ¡"; Parameters: "start";Flags:postinstall 
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{app}"
+Type: files; Name: "{app}\aria2-winsw.exe"
+Type: files; Name: "{app}\aria2-winsw.xml"
+Type: files; Name: "{app}\aria2c.exe"
+Type: files; Name: "{app}\aria2.conf"
+Type: files; Name: "{app}\aria2.log"
+Type: files; Name: "{app}\aria2.session"
+Type: files; Name: "{app}\aria2-winsw.err.log"
+Type: files; Name: "{app}\aria2-winsw.err.log.old"
+Type: files; Name: "{app}\aria2-winsw.out.log"
+Type: files; Name: "{app}\aria2-winsw.out.log.old"
+Type: files; Name: "{app}\aria2-winsw.wrapper.log"
+Type: dirifempty; Name: "{app}"
 
 [UninstallRun]
+Filename: "{app}\aria2-winsw.exe"; Parameters: "stop";Flags:runhidden
 Filename: "{app}\aria2-winsw.exe"; Parameters: "uninstall";Flags:runhidden
 
 [Code]
@@ -82,7 +94,7 @@ begin
   Result := True;
   if (not HasNet2()) and (not HasNet4()) then
   begin
-      MsgBox('ĞèÒª.net2.0»ò4.0Ö§³Ö!', mbInformation, MB_OK);
+      MsgBox('éœ€è¦.net2.0æˆ–4.0æ”¯æŒ!', mbInformation, MB_OK);
       Result := False;
   end;
 end;
@@ -106,17 +118,17 @@ begin
   DeleteFile(F);
 
   Page := CreateInputDirPage(wpSelectDir,
-    'Ñ¡ÔñÏÂÔØÎÄ¼ş´æ´¢Î»ÖÃ', 'ÄãÏë½«ÏÂÔØÎÄ¼ş´æ´¢ÔÚÊ²Ã´µØ·½£¿',
-    'ÏÂÔØÎÄ¼ş½«´æ´¢µ½ÏÂÁĞÎÄ¼ş¼ĞÖĞ¡£ '#13#10#13#10 +
-    'µ¥»÷¡°ÏÂÒ»²½¡±¼ÌĞø¡£Èç¹ûÄãÏëÑ¡ÔñÆäËûÎÄ¼ş¼Ğ£¬µ¥»÷¡°ä¯ÀÀ¡±¡£',
-    False, 'ĞÂ½¨ÎÄ¼ş¼Ğ');
+    'é€‰æ‹©ä¸‹è½½æ–‡ä»¶å­˜å‚¨ä½ç½®', 'ä½ æƒ³å°†ä¸‹è½½æ–‡ä»¶å­˜å‚¨åœ¨ä»€ä¹ˆåœ°æ–¹ï¼Ÿ',
+    'ä¸‹è½½æ–‡ä»¶å°†å­˜å‚¨åˆ°ä¸‹åˆ—æ–‡ä»¶å¤¹ä¸­ã€‚ '#13#10#13#10 +
+    'å•å‡»â€œä¸‹ä¸€æ­¥â€ç»§ç»­ã€‚å¦‚æœä½ æƒ³é€‰æ‹©å…¶ä»–æ–‡ä»¶å¤¹ï¼Œå•å‡»â€œæµè§ˆâ€ã€‚',
+    False, 'æ–°å»ºæ–‡ä»¶å¤¹');
 
-  // Ìí¼ÓÏîÄ¿ (ÓÃ¿Õ±êÌâ)
+  // æ·»åŠ é¡¹ç›® (ç”¨ç©ºæ ‡é¢˜)
   Page.Add('');
 
-  // ÉèÖÃ³õÊ¼Öµ (¿ÉÑ¡)
+  // è®¾ç½®åˆå§‹å€¼ (å¯é€‰)
   Page.Values[0] := ExpandConstant('{%HOMEPATH}\Downloads');
-   // ¶ÁÈ¡Öµµ½±äÁ¿
+   // è¯»å–å€¼åˆ°å˜é‡
   ResultDir := Page.Values[0];
 end;
 
@@ -180,7 +192,7 @@ begin
   Result := Is64BitInstallMode and (ProcessorArchitecture = paX64);
 end;
 
-procedure MyAfterInstall();
+procedure AfterCopyFiles();
 begin
   // modify config in aria2-winsw.xml
   SaveValueToXML(WizardDirValue + '\aria2-winsw.xml', '//service/executable', WizardDirValue + '\aria2c.exe');
@@ -191,12 +203,23 @@ end;
 procedure CurPageChanged(CurPageID: Integer);
 begin
   Case CurPageID of
-    wpWelcome : WaterSetParentWindow(WaterHandle, WizardForm.WelcomePage.Handle);  //½«Ë®²¨ÒÆ¶¯µ½ÁíÒ»¸ö¾ä±úÉÏ
-    wpFinished: WaterSetParentWindow(WaterHandle, WizardForm.FinishedPage.Handle); //½«Ë®²¨ÒÆ¶¯µ½ÁíÒ»¸ö¾ä±úÉÏ
+    wpWelcome : WaterSetParentWindow(WaterHandle, WizardForm.WelcomePage.Handle);  //å°†æ°´æ³¢ç§»åŠ¨åˆ°å¦ä¸€ä¸ªå¥æŸ„ä¸Š
+    wpFinished: WaterSetParentWindow(WaterHandle, WizardForm.FinishedPage.Handle); //å°†æ°´æ³¢ç§»åŠ¨åˆ°å¦ä¸€ä¸ªå¥æŸ„ä¸Š
   end;
 end;
 
-//ÊÍ·ÅËùÓĞË®²¨¶ÔÏó
+procedure StopAria2();
+begin
+  Exec(ExpandConstant('{app}\aria2-winsw.exe'), 'stop', '', SW_HIDE,ewWaitUntilTerminated, ResultCode);
+end;
+
+procedure InitializeUninstallProgressForm(); 
+begin
+  // å†æ¬¡stopï¼Œä¿è¯å¯¹åº”æ–‡ä»¶å¯ä»¥åˆ é™¤
+  StopAria2(); 
+end;
+
+//é‡Šæ”¾æ‰€æœ‰æ°´æ³¢å¯¹è±¡
 procedure DeinitializeSetup();
 begin
   WaterAllFree;
