@@ -1,5 +1,7 @@
 # aria2installer-Windows
-aria2安装包
+aria2安装包，将aria2安装为windows服务 
+
+[点击下载](https://github.com/benx203/aria2installer-Windows/releases/download/1.32/aria2setup.exe)
 
 # 感谢
 
